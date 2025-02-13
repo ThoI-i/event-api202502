@@ -1,6 +1,7 @@
 package com.study.event.controller;
 
 import com.study.event.domain.event.dto.request.EventCreate;
+import com.study.event.domain.event.dto.response.EventResponse;
 import com.study.event.domain.event.entity.Event;
 import com.study.event.service.EventService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class EventController {
+
     private final EventService eventService;
 
     // 전체조회 요청
@@ -23,8 +25,7 @@ public class EventController {
     public ResponseEntity<?> getList(
             @RequestParam(defaultValue = "id") String sort
     ) {
-        List<Event> events = eventService.getEvents(sort);
-
+        List<EventResponse> events = eventService.getEvents(sort);
         return ResponseEntity.ok().body(events);
     }
 
@@ -32,6 +33,7 @@ public class EventController {
     @PostMapping
     public ResponseEntity<?> register(@RequestBody EventCreate dto) {
         eventService.saveEvent(dto);
+
         return ResponseEntity.ok().body(Map.of(
                 "message", "이벤트가 정상 등록되었습니다."
         ));

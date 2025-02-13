@@ -1,3 +1,5 @@
+package com.study.event.service;
+
 import com.study.event.domain.event.dto.request.EventCreate;
 import com.study.event.domain.event.entity.Event;
 import com.study.event.repository.EventRepository;
@@ -14,11 +16,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional  // JPA에서는 필수
 public class EventService {
+
     private final EventRepository eventRepository;
 
     // 전체조회
-    public List<Event> getEvents() {
-        return eventRepository.findAll();
+    public List<Event> getEvents(String sort) {
+        return eventRepository.findEvents(sort);
     }
 
     // 이벤트 등록

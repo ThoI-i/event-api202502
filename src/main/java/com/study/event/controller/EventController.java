@@ -1,4 +1,3 @@
-
 package com.study.event.controller;
 
 import com.study.event.domain.event.dto.request.EventCreate;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/events")
@@ -25,9 +25,19 @@ public class EventController {
     // 전체조회 요청
     @GetMapping
     public ResponseEntity<?> getList(
-            @RequestParam(defaultValue = "id") String sort
+            @RequestParam(required = false) String sort,
+            @RequestParam(defaultValue = "1") int page
     ) {
-        List<EventResponse> events = eventService.getEvents(sort);
+        if (sort == null) {
+            return ResponseEntity.badRequest().body(
+                    Map.of(
+                            "message", "정렬 기준은 필수입니다."
+                    )
+            );
+        }
+
+        Map<String, Object> events = eventService.getEvents(sort, page);
+
         return ResponseEntity.ok().body(events);
     }
 
@@ -65,11 +75,11 @@ public class EventController {
             @PathVariable Long id
     ) {
         eventService.deleteEvent(id);
+
         return ResponseEntity.ok().body(Map.of(
                 "message", "이벤트가 삭제되었습니다. id - " + id
         ));
     }
-
     // 수정 요청
     @PutMapping("/{id}")
     public ResponseEntity<?> updateEvent(
@@ -77,6 +87,7 @@ public class EventController {
             , @RequestBody EventCreate dto
     ) {
         eventService.modifyEvent(dto, id);
+
         return ResponseEntity.ok().body(Map.of(
                 "message", "이벤트가 수정되었습니다. id - " + id
         ));

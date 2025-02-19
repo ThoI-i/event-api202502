@@ -7,11 +7,13 @@ import com.study.event.domain.event.entity.Event;
 import com.study.event.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -23,12 +25,23 @@ public class EventService {
 
     // 전체조회
     @Transactional(readOnly = true)
-    public List<EventResponse> getEvents(String sort) {
-        return eventRepository.findEvents(sort)
+    public Map<String, Object> getEvents(String sort, int pageNo) {
+
+        Slice<Event> events = eventRepository.findEvents(
+                sort,
+                PageRequest.of(pageNo - 1, 4)
+        );
+
+        List<EventResponse> eventList = events.getContent()
                 .stream()
                 .map(EventResponse::from)
                 .toList()
                 ;
+
+        return Map.of(
+                "hasNext", events.hasNext()
+                , "eventList", eventList
+        );
     }
 
     // 단일 조회
@@ -56,6 +69,7 @@ public class EventService {
         // 단일 조회 수행 후 엔터티 데이터를 변경하고 다시 save한다.
         Event foundEvent = eventRepository.findById(id).orElseThrow();
         foundEvent.changeEvent(dto);
+
         eventRepository.save(foundEvent);
     }
 }

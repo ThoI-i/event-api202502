@@ -1,4 +1,3 @@
-
 package com.study.event.domain.eventUser.entity;
 
 import jakarta.persistence.*;
@@ -45,4 +44,9 @@ public class EventUser {
         this.emailVerified = true;
     }
 
+    // 회원가입을 마무리하는 메서드
+    public void confirm(String password) {
+        this.password = password;
+        this.createdAt = LocalDateTime.now();
+    }
 }

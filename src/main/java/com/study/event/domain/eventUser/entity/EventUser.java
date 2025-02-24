@@ -1,3 +1,4 @@
+
 package com.study.event.domain.eventUser.entity;
 
 import jakarta.persistence.*;
@@ -33,11 +34,15 @@ public class EventUser {
     @Builder.Default
     private Role role = Role.COMMON; // 권한
 
-
     private LocalDateTime createdAt;
 
     // 이메일 인증을 완료했는지 여부
     @Column(nullable = false)
     private boolean emailVerified;
+
+    // 이메일 인증 완료를 처리하는 메서드
+    public void emailVerify() {
+        this.emailVerified = true;
+    }
 
 }

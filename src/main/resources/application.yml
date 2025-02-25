@@ -27,6 +27,7 @@ spring:
     hibernate:
       # ddl
       ddl-auto: none
+#      ddl-auto: create
     properties:
       hibernate:
         format_sql: true # SQL log

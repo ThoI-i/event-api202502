@@ -171,7 +171,7 @@ public class EventUserService {
         // 3. 코드가 일치하고 만료시간이 지나지 않았는지 체크
         if (
                 code.equals(verificationInfo.getVerificationCode())
-                && verificationInfo.getExpiryDate().isAfter(LocalDateTime.now())
+                        && verificationInfo.getExpiryDate().isAfter(LocalDateTime.now())
         ) {
             // 이메일 인증 완료처리
             // EventUser엔터티에서 emailVerified값을 true로 변경
@@ -239,7 +239,7 @@ public class EventUserService {
         }
 
         // 로그인 성공 - 액세스 토큰을 발급
-        String accessToken = tokenProvider.createAccessToken(dto.email());
+        String accessToken = tokenProvider.createAccessToken(foundUser);
 
         return Map.of(
                 "token", accessToken,

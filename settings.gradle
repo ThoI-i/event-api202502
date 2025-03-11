@@ -1,1 +1,7 @@
+// 툴 체인 자동 감지 설정
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+}
+
 rootProject.name = 'event'
+
